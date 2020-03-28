@@ -8,6 +8,7 @@ members = [
     "kernel/hosted-tcp",
     "kernel/hosted-time",
     "kernel/standalone",
+    "kernel/hosted-pipeline",
     "interfaces/hardware",
     "interfaces/interface",
     "interfaces/loader",
@@ -18,6 +19,7 @@ members = [
     "interfaces/system-time",
     "interfaces/tcp",
     "interfaces/time",
+    "interfaces/pipeline",
 ]
 
 [profile.dev]

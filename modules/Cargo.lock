@@ -1416,6 +1416,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5894c618ce612a3fa23881b152b608bafb8c56cfc22f434a3ba3120b40f7b587"
 
 [[package]]
+name = "pipers"
+version = "0.1.0"
+dependencies = [
+ "redshirt-interface-interface",
+ "redshirt-loader-interface",
+ "redshirt-log-interface",
+ "redshirt-pipeline-interface",
+ "redshirt-syscalls",
+]
+
+[[package]]
 name = "ppv-lite86"
 version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1631,6 +1642,16 @@ version = "0.1.0"
 dependencies = [
  "futures",
  "parity-scale-codec",
+ "redshirt-syscalls",
+]
+
+[[package]]
+name = "redshirt-pipeline-interface"
+version = "0.1.0"
+dependencies = [
+ "futures",
+ "parity-scale-codec",
+ "redshirt-log-interface",
  "redshirt-syscalls",
 ]
 

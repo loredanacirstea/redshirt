@@ -73,6 +73,7 @@ async fn async_main() {
         .with_native_program(redshirt_tcp_hosted::TcpHandler::new())
         .with_native_program(redshirt_log_hosted::LogHandler::new())
         .with_native_program(redshirt_random_hosted::RandomNativeProgram::new())
+        .with_native_program(redshirt_pipeline_hosted::PipeHandler::new())
         .with_startup_process(build_wasm_module!(
             "../../../modules/p2p-loader",
             "modules-loader"

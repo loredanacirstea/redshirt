@@ -1,0 +1,14 @@
+[package]
+name = "pipers"
+version = "0.1.0"
+authors = ["Loredana <loredana.cirstea@gmail.com>"]
+edition = "2018"
+publish = false
+
+[dependencies]
+redshirt-interface-interface = { path = "../../interfaces/interface" }
+redshirt-loader-interface = { path = "../../interfaces/loader" }
+redshirt-log-interface = { path = "../../interfaces/log" }
+redshirt-syscalls = { path = "../../interfaces/syscalls" }
+redshirt-pipeline-interface = { path = "../../interfaces/pipeline" }
+# redshirt-tcp-interface = { path = "../../interfaces/tcp" }

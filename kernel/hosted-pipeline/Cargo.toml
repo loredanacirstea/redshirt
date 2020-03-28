@@ -1,0 +1,13 @@
+[package]
+name = "redshirt-pipeline-hosted"
+version = "0.1.0"
+authors = ["Loredana <loredana.cirstea@gmail.com>"]
+edition = "2018"
+publish = false
+
+[dependencies]
+futures = "0.3.0"
+rand = "0.7.3"
+redshirt-core = { path = "../../core" }
+redshirt-interface-interface = { path = "../../interfaces/interface" }
+redshirt-pipeline-interface = { path = "../../interfaces/pipeline" }
