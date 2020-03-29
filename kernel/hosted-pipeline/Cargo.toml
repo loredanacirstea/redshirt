@@ -11,3 +11,5 @@ rand = "0.7.3"
 redshirt-core = { path = "../../core" }
 redshirt-interface-interface = { path = "../../interfaces/interface" }
 redshirt-pipeline-interface = { path = "../../interfaces/pipeline" }
+redshirt-loader-interface = { path = "../../interfaces/loader" }
+redshirt-syscalls = { path = "../../interfaces/syscalls" }

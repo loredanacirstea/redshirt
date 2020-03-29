@@ -12,7 +12,7 @@ pub const INTERFACE: InterfaceHash = InterfaceHash::from_raw_hash([
 ]);
 
 #[derive(Debug, Encode, Decode)]
-pub struct PipeNode {
+pub struct PipelineMessage {
     /// Random bytes. Must be of the requested length.
     pub module: u64,
     pub funcname: u64,
@@ -20,7 +20,7 @@ pub struct PipeNode {
 }
 
 #[derive(Debug, Encode, Decode)]
-pub struct GenerateResponse {
+pub struct PipelineResponse {
     /// Random bytes. Must be of the requested length.
     pub result: Result<Vec<u8>, ()>,
 }

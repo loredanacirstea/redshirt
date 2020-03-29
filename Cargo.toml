@@ -8,7 +8,7 @@ members = [
     "kernel/hosted-tcp",
     "kernel/hosted-time",
     "kernel/standalone",
-    "kernel/hosted-pipeline",
+    # "kernel/hosted-pipeline",
     "interfaces/hardware",
     "interfaces/interface",
     "interfaces/loader",
@@ -23,7 +23,10 @@ members = [
 ]
 
 [profile.dev]
-opt-level = 1
+opt-level = 0
+debug = 2
+debug-assertions = true
+panic = 'abort'
 
 [profile.dev.package.hashbrown]
 opt-level = 3

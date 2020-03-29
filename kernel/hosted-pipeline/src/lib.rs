@@ -1,10 +1,10 @@
 use futures::{channel::mpsc, lock::Mutex, prelude::*};
 use redshirt_core::native::{DummyMessageIdWrite, NativeProgramEvent, NativeProgramRef};
 use redshirt_core::{Decode as _, Encode as _, EncodedMessage, InterfaceHash, MessageId, Pid};
-use redshirt_pipeline_interface::ffi::{PipeNode, GenerateResponse, INTERFACE};
+use redshirt_pipeline_interface::ffi::{PipelineMessage, PipelineResponse, INTERFACE};
 use std::{borrow::Cow, pin::Pin, sync::atomic};
 
-pub struct PipeHandler{
+pub struct PipeHandler {
     /// If true, we have sent the interface registration message.
     registered: atomic::AtomicBool,
     /// Message responses waiting to be emitted.
@@ -62,10 +62,10 @@ impl<'a> NativeProgramRef<'a> for &'a PipeHandler {
             None => return,
         };
 
-        match PipeNode::decode(message) {
+        match PipelineMessage::decode(message) {
             Ok(decoded) => {
                 let data: Vec<u8> = vec!(2,4);
-                let response = GenerateResponse { result: Ok(data) };
+                let response = PipelineResponse { result: Ok(data) };
                 self.pending_messages_tx
                     .unbounded_send((message_id, Ok(response.encode())))
                     .unwrap();

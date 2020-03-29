@@ -970,6 +970,7 @@ dependencies = [
  "redshirt-interface-interface",
  "redshirt-loader-interface",
  "redshirt-log-interface",
+ "redshirt-pipeline-interface",
  "redshirt-random-interface",
  "redshirt-syscalls",
  "redshirt-system-time-interface",
@@ -1056,7 +1057,9 @@ dependencies = [
  "rand",
  "redshirt-core",
  "redshirt-interface-interface",
+ "redshirt-loader-interface",
  "redshirt-pipeline-interface",
+ "redshirt-syscalls",
 ]
 
 [[package]]
