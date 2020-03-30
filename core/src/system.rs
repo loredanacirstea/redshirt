@@ -68,6 +68,9 @@ pub struct SystemBuilder {
     /// "Virtual" pid for the process that sends messages towards the loader.
     load_source_virtual_pid: Pid,
 
+    /// "Virtual" pid for handling messages on the `pipeline` interface.
+    pipeline_interface_pid: Pid,
+
     /// List of programs to start executing immediately after construction.
     startup_processes: Vec<Module>,
 
@@ -264,6 +267,34 @@ impl System {
                 message_id,
                 interface,
                 message,
+            } if interface == redshirt_pipeline_interface::ffi::INTERFACE => {
+                
+                match redshirt_pipeline_interface::ffi::PipelineMessage::decode(message) {
+                    Ok(redshirt_pipeline_interface::ffi::PipelineMessage { module, funcname, inputs }) => {
+                        // redshirt_log_interface::log(redshirt_log_interface::Level::Info, &"system received pipecall");
+                        let data: Vec<u8> = [20,21].to_vec();
+                        let response =
+                            redshirt_pipeline_interface::ffi::PipelineResponse {
+                                // result: Ok(data.clone()),
+                                result: Ok(data),
+                            };
+                        if let Some(message_id) = message_id {
+                            self.core.answer_message(message_id, Ok(response.encode()));
+                        }
+                    }
+                    Err(_) => {
+                        if let Some(message_id) = message_id {
+                            self.core.answer_message(message_id, Err(()));
+                        }
+                    }
+                }
+            }
+
+            CoreRunOutcome::ReservedPidInterfaceMessage {
+                pid,
+                message_id,
+                interface,
+                message,
             } => {
                 self.native_programs
                     .interface_message(interface, message_id, pid, message);
@@ -281,11 +312,13 @@ impl SystemBuilder {
         let mut core = Core::new();
         let interface_interface_pid = core.reserve_pid();
         let load_source_virtual_pid = core.reserve_pid();
+        let pipeline_interface_pid = core.reserve_pid();
 
         SystemBuilder {
             core,
             interface_interface_pid,
             load_source_virtual_pid,
+            pipeline_interface_pid,
             startup_processes: Vec::new(),
             programs_to_load: SegQueue::new(),
             native_programs: native::NativeProgramsCollection::new(),
@@ -351,6 +384,16 @@ impl SystemBuilder {
         match core.set_interface_handler(
             redshirt_interface_interface::ffi::INTERFACE,
             self.interface_interface_pid,
+        ) {
+            Ok(()) => {}
+            Err(_) => unreachable!(),
+        };
+
+        // We ask the core to redirect messages for the `pipeline` interface towards our
+        // "virtual" `Pid`.
+        match core.set_interface_handler(
+            redshirt_pipeline_interface::ffi::INTERFACE,
+            self.pipeline_interface_pid,
         ) {
             Ok(()) => {}
             Err(_) => unreachable!(),

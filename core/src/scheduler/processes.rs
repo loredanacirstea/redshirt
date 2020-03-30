@@ -419,6 +419,7 @@ impl<TExtr> ProcessesCollectionBuilder<TExtr> {
     /// >           `Pid`s that last forever. There is therefore no corresponding "unreserve_pid"
     /// >           method that frees such an allocated `Pid`. If there is ever a need to free
     /// >           these `Pid`s, such a method should be added.
+    /// > TODO: freeing allocated `Pid`s for temporary use of wasm modules
     pub fn reserve_pid(&mut self) -> Pid {
         // Note that we take `&mut self`. It could be `&self`, but that would expose
         // implementation details.

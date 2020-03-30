@@ -1,0 +1,425 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-core'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-core"
+                ],
+                "filter": {
+                    "name": "redshirt-core",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-interface-interface'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-interface-interface"
+                ],
+                "filter": {
+                    "name": "redshirt-interface-interface",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-syscalls'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-syscalls"
+                ],
+                "filter": {
+                    "name": "redshirt-syscalls",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-loader-interface'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-loader-interface"
+                ],
+                "filter": {
+                    "name": "redshirt-loader-interface",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-log-interface'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-log-interface"
+                ],
+                "filter": {
+                    "name": "redshirt-log-interface",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-pipeline-interface'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-pipeline-interface"
+                ],
+                "filter": {
+                    "name": "redshirt-pipeline-interface",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-random-interface'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-random-interface"
+                ],
+                "filter": {
+                    "name": "redshirt-random-interface",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-system-time-interface'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-system-time-interface"
+                ],
+                "filter": {
+                    "name": "redshirt-system-time-interface",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-time-interface'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-time-interface"
+                ],
+                "filter": {
+                    "name": "redshirt-time-interface",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'redshirt-cli-kernel'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=redshirt-cli-kernel",
+                    "--package=redshirt-cli-kernel"
+                ],
+                "filter": {
+                    "name": "redshirt-cli-kernel",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'redshirt-cli-kernel' with pipeline",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=redshirt-cli-kernel",
+                    "--package=redshirt-cli-kernel"
+                ],
+                "filter": {
+                    "name": "redshirt-cli-kernel",
+                    "kind": "bin"
+                }
+            },
+            "args": [
+                "--module-path=./modules/target/wasm32-wasi/debug/pipers.wasm"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'redshirt-cli-kernel'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=redshirt-cli-kernel",
+                    "--package=redshirt-cli-kernel"
+                ],
+                "filter": {
+                    "name": "redshirt-cli-kernel",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-log-hosted'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-log-hosted"
+                ],
+                "filter": {
+                    "name": "redshirt-log-hosted",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-pipeline-hosted'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-pipeline-hosted"
+                ],
+                "filter": {
+                    "name": "redshirt-pipeline-hosted",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-random-hosted'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-random-hosted"
+                ],
+                "filter": {
+                    "name": "redshirt-random-hosted",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-tcp-hosted'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-tcp-hosted"
+                ],
+                "filter": {
+                    "name": "redshirt-tcp-hosted",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-tcp-interface'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-tcp-interface"
+                ],
+                "filter": {
+                    "name": "redshirt-tcp-interface",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-time-hosted'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-time-hosted"
+                ],
+                "filter": {
+                    "name": "redshirt-time-hosted",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'redshirt-standalone-kernel'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=redshirt-standalone-kernel",
+                    "--package=redshirt-standalone-kernel"
+                ],
+                "filter": {
+                    "name": "redshirt-standalone-kernel",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'redshirt-standalone-kernel'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=redshirt-standalone-kernel",
+                    "--package=redshirt-standalone-kernel"
+                ],
+                "filter": {
+                    "name": "redshirt-standalone-kernel",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-hardware-interface'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-hardware-interface"
+                ],
+                "filter": {
+                    "name": "redshirt-hardware-interface",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'redshirt-pci-interface'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=redshirt-pci-interface"
+                ],
+                "filter": {
+                    "name": "redshirt-pci-interface",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
