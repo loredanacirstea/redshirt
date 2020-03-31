@@ -13,9 +13,13 @@ async fn async_main() {
     // let rp = redshirt_loader_interface::ffi::LoadResponse { result: Ok(data) };
     // redshirt_syscalls::emit_answer(user_data, &rp);
 
+    let wasm_file_content: Vec<u8> = vec!(0, 97, 115, 109, 1, 0, 0, 0, 1, 7, 1, 96, 2, 127, 127, 1, 127, 3, 2, 1, 0, 7, 7, 1, 3, 97, 100, 100, 0, 0, 10, 9, 1, 7, 0, 32, 0, 32, 1, 106, 11);
+
     let result = redshirt_pipeline_interface::run(
         redshirt_pipeline_interface::ffi::PipelineMessage {
-            module: 2, funcname: 4, inputs: vec!(2,3),
+            module: wasm_file_content,
+            funcname: "add".as_bytes().to_vec(), // &"sum_u32",
+            inputs: vec!(8,3),
         }
     ).await.unwrap();
     println!("Result {:?}", result);

@@ -13,14 +13,14 @@ pub const INTERFACE: InterfaceHash = InterfaceHash::from_raw_hash([
 
 #[derive(Debug, Encode, Decode)]
 pub struct PipelineMessage {
-    /// Random bytes. Must be of the requested length.
-    pub module: u64,
-    pub funcname: u64,
-    pub inputs: Vec<u64>,
+    /// blake3 hash passed as parameter.
+    // pub module: [u8; 32],
+    pub module: Vec<u8>,
+    pub funcname: Vec<u8>,
+    pub inputs: Vec<i32>,
 }
 
 #[derive(Debug, Encode, Decode)]
 pub struct PipelineResponse {
-    /// Random bytes. Must be of the requested length.
     pub result: Result<Vec<u8>, ()>,
 }

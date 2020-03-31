@@ -18,6 +18,7 @@ use crate::native::{self, NativeProgramMessageIdWrite as _};
 use crate::scheduler::{Core, CoreBuilder, CoreRunOutcome, NewErr};
 
 use alloc::vec::Vec;
+use alloc::str;
 use core::{cell::RefCell, iter, num::NonZeroU64, sync::atomic, task::Poll};
 use crossbeam_queue::SegQueue;
 use futures::prelude::*;
@@ -271,13 +272,33 @@ impl System {
                 
                 match redshirt_pipeline_interface::ffi::PipelineMessage::decode(message) {
                     Ok(redshirt_pipeline_interface::ffi::PipelineMessage { module, funcname, inputs }) => {
-                        // redshirt_log_interface::log(redshirt_log_interface::Level::Info, &"system received pipecall");
-                        let data: Vec<u8> = [20,21].to_vec();
-                        let response =
-                            redshirt_pipeline_interface::ffi::PipelineResponse {
-                                // result: Ok(data.clone()),
-                                result: Ok(data),
-                            };
+                        let module = Module::from_bytes(&module).expect("module isn't proper wasm");
+
+                        let instance = wasmi::ModuleInstance::new(
+                                module.as_ref(),
+                                &wasmi::ImportsBuilder::default()
+                            )
+                            .expect("failed to instantiate wasm module")
+                            .assert_no_start();
+
+                        let result = match instance.invoke_export(
+                            str::from_utf8(&funcname).unwrap(),
+                            &inputs.iter().map(|i| wasmi::RuntimeValue::I32(*i)).collect::<Vec<_>>(),
+                            &mut wasmi::NopExternals,
+                        ).expect("failed to execute export") {
+                            Some(m) => m,
+                            _ => wasmi::RuntimeValue::I32(0), // fixme
+                        };
+
+                        let res: u8 = match wasmi::FromRuntimeValue::from_runtime_value(result) {
+                            Some(m) => m,
+                            _ => 0, // fixme
+                        };
+                        
+                        let response = redshirt_pipeline_interface::ffi::PipelineResponse {
+                            result: Ok([res].to_vec()),
+                        };
+
                         if let Some(message_id) = message_id {
                             self.core.answer_message(message_id, Ok(response.encode()));
                         }

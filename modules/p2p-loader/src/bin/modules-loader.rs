@@ -25,8 +25,6 @@ fn main() {
 
 async fn async_main() {
     redshirt_time_interface::monotonic_wait(Duration::from_secs(5)).await;
-    
-    log::info!("module loader registration");
 
     log::info!("module loader registration");
 
