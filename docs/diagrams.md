@@ -112,6 +112,8 @@ System -> ipc_Core: emit_interface_answer* \n answer_message \n cancel_message
 participant System
 participant ipc_Core
 participant extr_ProcessesCollectionExtrinsics
+participant proc_ProcessesCollection
+participant vm_Thread
 participant native_NativeProgramsCollection
 
 System -> System: run_once()
@@ -121,7 +123,47 @@ Note over ipc_Core: if pending_events \n return self.pending_events.pop()
 Note over ipc_Core: else \n self.processes.run()
 ipc_Core -> extr_ProcessesCollectionExtrinsics: run()
 
-Note over extr_ProcessesCollectionExtrinsics: ProcessFinished \n ThreadFinished \n ThreadWaitNotification \n ThreadEmitAnswer \n ThreadEmitMessageError \n ThreadCancelMessage \n Idle
+Note over extr_ProcessesCollectionExtrinsics: self.inner
+extr_ProcessesCollectionExtrinsics -> proc_ProcessesCollection: run()
+
+Note over proc_ProcessesCollection: find thread \n ready to run \n self.processes
+Note over proc_ProcessesCollection: process.state_machine.thread \n thread.user_data().value_back.take()
+proc_ProcessesCollection -> vm_Thread: run \n (value_back: wasmi::RV)
+
+Note over vm_Thread: self.vm.threads[self.index] \n vm_ThreadState
+vm_Thread -> vm_ThreadState: execution.resume_execution() | \n execution.start_execution()
+Note over vm_ThreadState: execution: \n wasmi::FuncInvocation
+vm_ThreadState -> vm_Thread: return_value
+
+Note over vm_Thread: return: \n ThreadFinished \n Interrupted \n Errored
+vm_Thread -> proc_ProcessesCollection: ExecOutcome
+
+Note over proc_ProcessesCollection: return: \n ProcessFinished \n ThreadFinished \n Idle \n Interrupted \n
+proc_ProcessesCollection -> extr_ProcessesCollectionExtrinsics: proc_RunOneOutcome
+
+Note over extr_ProcessesCollectionExtrinsics: return: \n ProcessFinished \n ThreadFinished \n ThreadWaitNotification \n ThreadEmitAnswer \n ThreadEmitMessageError \n ThreadCancelMessage \n Idle
+
+extr_ProcessesCollectionExtrinsics -> ipc_Core: RunOneOutcome
+
+
+Note over ipc_Core: return: \n Idle \n ProgramFinished \n ThreadWaitUnavailableInterface \n  MessageResponse \n ReservedPidInterfaceMessage
+ipc_Core -> System: CoreRunOutcome
+
+System -> System: RunOnceOutcome
+
+
+```
+
+## System run_once Core outcomes
+
+
+```sequence
+
+participant System
+participant ipc_Core
+participant extr_ProcessesCollectionExtrinsics
+
+extr_ProcessesCollectionExtrinsics -> ipc_Core: RunOneOutcome
 
 Note over ipc_Core: if ProcessFinished \n unregister interfaces \n cancel messages \n syscall process destroyed
 ipc_Core -> System: CoreRunOutcome::ProgramFinished
@@ -150,12 +192,13 @@ ipc_Core -> System: None
 
 Note over ipc_Core: if Idle
 ipc_Core -> System: CoreRunOutcome::Idle
+```
 
-extr_ProcessesCollectionExtrinsics -> ipc_Core: RunOneOutcome
+## System run_once outcomes
 
-ipc_Core -> System: CoreRunOutcome
-Note over System: Idle \n ProgramFinished \n ThreadWaitUnavailableInterface \n  MessageResponse \n ReservedPidInterfaceMessage \n ...
 
+
+```sequence
 
 Note over System: if MessageResponse \n load & execute wasm
 System -> ipc_Core: execute(module)
@@ -183,8 +226,6 @@ Adapter_NativeProgramRef -> NativeProgramRef: interface_message \n (interface, m
 NativeProgramRef -> Adapter_NativeProgramRef: -
 Adapter_NativeProgramRef -> native_NativeProgramsCollection: -
 native_NativeProgramsCollection -> System: - / Err msg
-
-System -> System: RunOnceOutcome
 
 
 ```
