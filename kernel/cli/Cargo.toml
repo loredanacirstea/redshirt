@@ -16,6 +16,7 @@ redshirt-random-hosted = { path = "../hosted-random" }
 redshirt-syscalls = { path = "../../interfaces/syscalls" }
 redshirt-tcp-hosted = { path = "../hosted-tcp" }
 redshirt-time-hosted = { path = "../hosted-time" }
+redshirt-pipeline-hosted = { path = "../hosted-pipeline" }
 parity-scale-codec = "1.0.5"
 structopt = "0.3.5"
 wasi = "0.9.0+wasi-snapshot-preview1"

@@ -939,6 +939,7 @@ dependencies = [
  "parity-scale-codec",
  "redshirt-core",
  "redshirt-log-hosted",
+ "redshirt-pipeline-hosted",
  "redshirt-random-hosted",
  "redshirt-syscalls",
  "redshirt-tcp-hosted",
@@ -969,6 +970,7 @@ dependencies = [
  "redshirt-interface-interface",
  "redshirt-loader-interface",
  "redshirt-log-interface",
+ "redshirt-pipeline-interface",
  "redshirt-random-interface",
  "redshirt-syscalls",
  "redshirt-system-time-interface",
@@ -1044,6 +1046,29 @@ version = "0.1.0"
 dependencies = [
  "futures",
  "parity-scale-codec",
+ "redshirt-syscalls",
+]
+
+[[package]]
+name = "redshirt-pipeline-hosted"
+version = "0.1.0"
+dependencies = [
+ "futures",
+ "rand",
+ "redshirt-core",
+ "redshirt-interface-interface",
+ "redshirt-loader-interface",
+ "redshirt-pipeline-interface",
+ "redshirt-syscalls",
+]
+
+[[package]]
+name = "redshirt-pipeline-interface"
+version = "0.1.0"
+dependencies = [
+ "futures",
+ "parity-scale-codec",
+ "redshirt-log-interface",
  "redshirt-syscalls",
 ]
 

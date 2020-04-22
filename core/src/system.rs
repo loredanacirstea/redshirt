@@ -18,6 +18,7 @@ use crate::native::{self, NativeProgramMessageIdWrite as _};
 use crate::scheduler::{Core, CoreBuilder, CoreRunOutcome, NewErr};
 
 use alloc::vec::Vec;
+use alloc::str;
 use core::{cell::RefCell, iter, num::NonZeroU64, sync::atomic, task::Poll};
 use crossbeam_queue::SegQueue;
 use futures::prelude::*;
@@ -67,6 +68,9 @@ pub struct SystemBuilder {
 
     /// "Virtual" pid for the process that sends messages towards the loader.
     load_source_virtual_pid: Pid,
+
+    /// "Virtual" pid for handling messages on the `pipeline` interface.
+    pipeline_interface_pid: Pid,
 
     /// List of programs to start executing immediately after construction.
     startup_processes: Vec<Module>,
@@ -264,6 +268,54 @@ impl System {
                 message_id,
                 interface,
                 message,
+            } if interface == redshirt_pipeline_interface::ffi::INTERFACE => {
+                
+                match redshirt_pipeline_interface::ffi::PipelineMessage::decode(message) {
+                    Ok(redshirt_pipeline_interface::ffi::PipelineMessage { module, funcname, inputs }) => {
+                        let module = Module::from_bytes(&module).expect("module isn't proper wasm");
+
+                        let instance = wasmi::ModuleInstance::new(
+                                module.as_ref(),
+                                &wasmi::ImportsBuilder::default()
+                            )
+                            .expect("failed to instantiate wasm module")
+                            .assert_no_start();
+
+                        let result = match instance.invoke_export(
+                            str::from_utf8(&funcname).unwrap(),
+                            &inputs.iter().map(|i| wasmi::RuntimeValue::I32(*i)).collect::<Vec<_>>(),
+                            &mut wasmi::NopExternals,
+                        ).expect("failed to execute export") {
+                            Some(m) => m,
+                            _ => wasmi::RuntimeValue::I32(0), // fixme
+                        };
+
+                        let res: u8 = match wasmi::FromRuntimeValue::from_runtime_value(result) {
+                            Some(m) => m,
+                            _ => 0, // fixme
+                        };
+                        
+                        let response = redshirt_pipeline_interface::ffi::PipelineResponse {
+                            result: Ok([res].to_vec()),
+                        };
+
+                        if let Some(message_id) = message_id {
+                            self.core.answer_message(message_id, Ok(response.encode()));
+                        }
+                    }
+                    Err(_) => {
+                        if let Some(message_id) = message_id {
+                            self.core.answer_message(message_id, Err(()));
+                        }
+                    }
+                }
+            }
+
+            CoreRunOutcome::ReservedPidInterfaceMessage {
+                pid,
+                message_id,
+                interface,
+                message,
             } => {
                 self.native_programs
                     .interface_message(interface, message_id, pid, message);
@@ -281,11 +333,13 @@ impl SystemBuilder {
         let mut core = Core::new();
         let interface_interface_pid = core.reserve_pid();
         let load_source_virtual_pid = core.reserve_pid();
+        let pipeline_interface_pid = core.reserve_pid();
 
         SystemBuilder {
             core,
             interface_interface_pid,
             load_source_virtual_pid,
+            pipeline_interface_pid,
             startup_processes: Vec::new(),
             programs_to_load: SegQueue::new(),
             native_programs: native::NativeProgramsCollection::new(),
@@ -351,6 +405,16 @@ impl SystemBuilder {
         match core.set_interface_handler(
             redshirt_interface_interface::ffi::INTERFACE,
             self.interface_interface_pid,
+        ) {
+            Ok(()) => {}
+            Err(_) => unreachable!(),
+        };
+
+        // We ask the core to redirect messages for the `pipeline` interface towards our
+        // "virtual" `Pid`.
+        match core.set_interface_handler(
+            redshirt_pipeline_interface::ffi::INTERFACE,
+            self.pipeline_interface_pid,
         ) {
             Ok(()) => {}
             Err(_) => unreachable!(),
